@@ -1,6 +1,8 @@
-import express, {Request, Response} from 'express';
+import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+
+import { UserRouter } from './router/user.router'
 
 
 class ServerBootstrap {
@@ -15,13 +17,15 @@ class ServerBootstrap {
       this.app.use(morgan('dev'));
       this.app.use(cors());
 
-      // route config
-      this.app.get('/api/hola', (req: Request, res: Response) => {
-         res.status(200).json({message: 'Hola Mundo!'})
-      })
+      this.app.use('/api', this.routers())
 
       // execute server
       this.listen();
+   }
+
+   // routes
+   routers(): Array<express.Router> {
+      return [new UserRouter().router];
    }
 
    // methods
